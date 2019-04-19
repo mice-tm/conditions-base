@@ -1,0 +1,35 @@
+{
+  "name": "mice-tm/conditions-base",
+  "type": "library",
+  "description": "Base library for conditons builder",
+  "keywords": ["conditions", "builder"],
+  "license": "MIT",
+  "minimum-stability": "stabel",
+  "authors": [
+    {
+      "name": "Iryna Mychkova",
+      "email": "imychkova@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "micetm\\conditionsBase\\": "src"
+    }
+  },
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://asset-packagist.org"
+    }
+  ],
+  "require": {
+    "php": ">=7.1.0",
+    "oomphinc/composer-installers-extender": "^1.1.2"
+  },
+  "config": {
+    "process-timeout": 1800
+  },
+  "require-dev": {
+    "codeception/codeception": "2.5.x-dev"
+  }
+}
