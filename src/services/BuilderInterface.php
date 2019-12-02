@@ -12,6 +12,6 @@ interface BuilderInterface
      * @return array
      * @throws WrongComparison
      */
-    public static function create($conditions):array;
+    public function create($conditions):array;
 
 }

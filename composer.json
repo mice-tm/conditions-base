@@ -4,7 +4,7 @@
   "description": "Base library for conditons builder",
   "keywords": ["conditions", "builder"],
   "license": "MIT",
-  "minimum-stability": "stabel",
+  "minimum-stability": "stable",
   "authors": [
     {
       "name": "Iryna Mychkova",
@@ -13,7 +13,8 @@
   ],
   "autoload": {
     "psr-4": {
-      "micetm\\conditionsBase\\": "src"
+      "micetm\\conditionsBase\\": "src",
+      "micetm\\conditionsBase\\tests\\": "tests/"
     }
   },
   "repositories": [
@@ -24,6 +25,8 @@
   ],
   "require": {
     "php": ">=7.1.0",
+    "yiisoft/yii2": "2.0.15.1",
+    "yii2tech/embedded": "~1.0.3",
     "oomphinc/composer-installers-extender": "^1.1.2"
   },
   "config": {
