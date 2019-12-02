@@ -1,7 +1,7 @@
 <?php
 namespace test\unit\models\constructor\services;
 
-use micetm\conditionsBase\models\conditions\Condition;
+use micetm\conditionsBase\models\constructor\conditions\Condition;
 use micetm\conditionsBase\services\ComparisonHelper;
 use micetm\conditionsBase\models\AttributeInterface;
 use PHPUnit\Framework\TestCase;

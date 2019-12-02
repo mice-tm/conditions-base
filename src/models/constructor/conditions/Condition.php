@@ -1,6 +1,6 @@
 <?php
 
-namespace micetm\conditionsBase\models\conditions;
+namespace micetm\conditionsBase\models\constructor\conditions;
 
 use micetm\conditionsBase\models\ConditionInterface;
 use yii\base\Model;
@@ -9,7 +9,7 @@ use yii2tech\embedded\ContainerTrait;
 
 /**
  * Class Condition
- * @package micetm\conditionsBase\models\conditions
+ * @package micetm\conditionsBase\models\constructor\conditions
  */
 class Condition extends Model implements ContainerInterface, ConditionInterface
 {

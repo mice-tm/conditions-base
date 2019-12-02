@@ -1,7 +1,7 @@
 <?php
 namespace test\unit\models\constructor\services\builders\elasticsearch;
 
-use micetm\conditionsBase\models\conditions\Condition;
+use micetm\conditionsBase\models\constructor\conditions\Condition;
 use micetm\conditionsBase\services\builders\elasticsearch\comparisons\ComparisonManager;
 use micetm\conditionsBase\services\builders\elasticsearch\QueryBuilder;
 use micetm\conditionsBase\exceptions\WrongComparison;

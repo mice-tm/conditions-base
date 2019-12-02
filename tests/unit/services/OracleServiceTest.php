@@ -2,7 +2,7 @@
 namespace test\unit\models\constructor\services;
 
 use micetm\conditionsBase\models\AttributeInterface;
-use micetm\conditionsBase\models\conditions\Condition;
+use micetm\conditionsBase\models\constructor\conditions\Condition;
 use micetm\conditionsBase\services\OracleService;
 use PHPUnit\Framework\TestCase;
 

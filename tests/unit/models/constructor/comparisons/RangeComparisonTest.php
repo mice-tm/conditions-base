@@ -2,7 +2,7 @@
 namespace test\unit\models\constructor\comparisons;
 
 use micetm\conditionsBase\services\builders\elasticsearch\comparisons\RangeComparison;
-use micetm\conditionsBase\models\conditions\Condition;
+use micetm\conditionsBase\models\constructor\conditions\Condition;
 use PHPUnit\Framework\TestCase;
 
 class RangeComparisonTest extends TestCase

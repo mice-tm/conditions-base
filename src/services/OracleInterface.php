@@ -2,7 +2,7 @@
 
 namespace micetm\conditionsBase\services;
 
-use micetm\conditionsBase\models\conditions\Condition;
+use micetm\conditionsBase\models\constructor\conditions\Condition;
 
 interface OracleInterface
 {
