@@ -5,7 +5,7 @@ namespace micetm\conditionsBase\services;
 use micetm\conditionsBase\exceptions\AttributeNotFoundException;
 use micetm\conditionsBase\models\constructor\conditions\Condition;
 use micetm\conditionsBase\models\constructor\attributes\AbstractAttribute;
-use micetm\conditionsBase\models\constructor\attributes\activeRecords\Attribute;
+use micetm\conditionsBase\models\constructor\attributes\activeRecords\mongodb\Attribute;
 use micetm\conditionsBase\models\constructor\attributes\activeRecords\AttributeInterface;
 use micetm\conditionsBase\models\search\AttributeSearchInterface;
 use yii\helpers\ArrayHelper;

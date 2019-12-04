@@ -1,14 +1,15 @@
 <?php
-namespace test\unit\models\constructor\services\builders\elasticsearch;
 
-use micetm\conditionsBase\models\constructor\conditions\Condition;
-use micetm\conditionsBase\services\builders\elasticsearch\comparisons\ComparisonManager;
-use micetm\conditionsBase\services\builders\elasticsearch\QueryBuilder;
+namespace test\unit\models\constructor\services\builders\mongodb;
+
 use micetm\conditionsBase\exceptions\WrongComparison;
 use micetm\conditionsBase\models\AttributeInterface;
+use micetm\conditionsBase\models\constructor\conditions\Condition;
+use micetm\conditionsBase\services\builders\mongodb\comparisons\ComparisonManager;
+use micetm\conditionsBase\services\builders\mongodb\QueryBuilder;
 use PHPUnit\Framework\TestCase;
 
-class QueryBuilderTest extends TestCase
+class MongoDBQueryBuilderTest extends TestCase
 {
     /**
      * @dataProvider providerUnarySuccess
@@ -31,14 +32,7 @@ class QueryBuilderTest extends TestCase
                     'value' => 55555
                 ]),
                 'expectedQuery' => [
-                    "query" => [
-                        "bool" => [
-                            "should" => [
-                                ["term" => ["items.id.raw" => 55555]],
-                                ["match_phrase" => ["items.id" => 55555]]
-                            ]
-                        ]
-                    ]
+                    'items.id' => 55555
                 ],
             ],
             [
@@ -48,11 +42,7 @@ class QueryBuilderTest extends TestCase
                     'value' => $now
                 ]),
                 'expectedQuery' => [
-                    "query" => [
-                        "range" => [
-                            "start_at" => ["gt" => $now],
-                        ]
-                    ]
+                    'start_at' => ['$gt' => $now],
                 ],
             ],
             [
@@ -62,11 +52,7 @@ class QueryBuilderTest extends TestCase
                     'value' => $now
                 ]),
                 'expectedQuery' => [
-                    "query" => [
-                        "range" => [
-                            "start_at" => ["gte" => $now],
-                        ]
-                    ]
+                    'start_at' => ['$gte' => $now],
                 ],
             ],
             [
@@ -76,11 +62,7 @@ class QueryBuilderTest extends TestCase
                     'value' => $now
                 ]),
                 'expectedQuery' => [
-                    "query" => [
-                        "range" => [
-                            "start_at" => ["lt" => $now],
-                        ]
-                    ]
+                    'start_at' => ['$lt' => $now],
                 ],
             ],
             [
@@ -90,11 +72,7 @@ class QueryBuilderTest extends TestCase
                     'value' => $now
                 ]),
                 'expectedQuery' => [
-                    "query" => [
-                        "range" => [
-                            "start_at" => ["lte" => $now],
-                        ]
-                    ]
+                    'start_at' => ['$lte' => $now],
                 ],
             ],
             [
@@ -104,13 +82,8 @@ class QueryBuilderTest extends TestCase
                     'value' => ['Cats', 'Animals'],
                 ]),
                 'expectedQuery' => [
-                    "query" => [
-                        "bool" => [
-                            "should" => [
-                                ["terms" => ["items.properties.topic.raw" => ['Cats', 'Animals']]],
-                                ["terms" => ["items.properties.topic" => ['Cats', 'Animals']]]
-                            ]
-                        ]
+                    'items.properties.topic' => [
+                        '$in' => ['Cats', 'Animals']
                     ]
                 ],
             ],
@@ -121,13 +94,8 @@ class QueryBuilderTest extends TestCase
                     'value' => ['Cats', 'Animals'],
                 ]),
                 'expectedQuery' => [
-                    "query" => [
-                        "bool" => [
-                            "should" => [
-                                ["terms" => ["items.properties.topic.raw" => ['Cats', 'Animals']]],
-                                ["terms" => ["items.properties.topic" => ['Cats', 'Animals']]]
-                            ]
-                        ]
+                    'items.properties.topic' => [
+                        '$in' => ['Cats', 'Animals']
                     ]
                 ],
             ],
@@ -138,14 +106,7 @@ class QueryBuilderTest extends TestCase
                     'value' => 'cats',
                 ]),
                 'expectedQuery' => [
-                    "query" => [
-                        "bool" => [
-                            "should" => [
-                                ["match" => ["items.properties.topic" => 'cats']],
-                                ["wildcard" => ["items.properties.topic.raw" => '*cats*']]
-                            ]
-                        ]
-                    ]
+                    '$text' => ['$search' => 'cats']
                 ],
             ],
             [
@@ -155,18 +116,12 @@ class QueryBuilderTest extends TestCase
                     'value' => 'Cats',
                 ]),
                 'expectedQuery' => [
-                    "query" => [
-                        "bool" => [
-                            "should" => [
-                                ["match" => ["items.properties.topic" => 'Cats']],
-                                ["wildcard" => ["items.properties.topic.raw" => '*cats*']]
-                            ]
-                        ]
-                    ]
+                    '$text' => ['$search' => 'Cats']
                 ],
             ],
         ];
     }
+
 
     public function testUnaryQueryCreationFail()
     {
@@ -185,7 +140,7 @@ class QueryBuilderTest extends TestCase
         $condition = new Condition([]);
         $queryBuilder = new QueryBuilder(new ComparisonManager());
         $query = $queryBuilder->create([$condition]);
-        $this->assertEquals($query, ['query' => null]);
+        $this->assertEquals($query, []);
     }
 
     public function testUnaryQueryCreationEmpty2()
@@ -202,9 +157,9 @@ class QueryBuilderTest extends TestCase
     {
         $queryBuilder = new QueryBuilder(new ComparisonManager());
         $query = $queryBuilder->create($condition);
+        codecept_debug(json_encode($query));
         $this->assertEquals($query, $expectedQuery);
     }
-
 
     public function providerComplexQuerySuccessCreation()
     {
@@ -228,23 +183,14 @@ class QueryBuilderTest extends TestCase
                     ]
                 ])],
                 'expectedQuery' => [
-                    "query" => [
-                        "bool" => [
-                            "must" => [
-                                [
-                                    "range" => ["start_at" => ["gt" => $now]],
-                                ],
-                                [
-                                    "bool" => [
-                                        "should" => [
-                                            ["match" => ["items.properties.topic" => 'cats']],
-                                            ["wildcard" => ["items.properties.topic.raw" => '*cats*']],
-                                        ],
-                                    ],
-                                ],
-                            ]
+                    '$and' => [
+                        [
+                            'start_at' => ['$gt' => $now]
                         ],
-                    ],
+                        [
+                            '$text' => ['$search' => 'cats']
+                        ]
+                    ]
                 ],
             ],
             [
@@ -261,14 +207,10 @@ class QueryBuilderTest extends TestCase
                     ]),
                 ],
                 'expectedQuery' => [
-                    "query" => [
-                        "bool" => [
-                            "should" => [
-                                ["range" => ["start_at" => ["gt" => $now]]],
-                                ["range" => ["start_at" => ["lt" => $now]]],
-                            ]
-                        ],
-                    ],
+                    '$or' => [
+                        ['start_at' => ['$gt' => $now]],
+                        ['start_at' => ['$lt' => $now]]
+                    ]
                 ],
             ],
             [
@@ -279,8 +221,8 @@ class QueryBuilderTest extends TestCase
                             'attribute' => 'flatConditions',
                             'comparison' => AttributeInterface::EMBEDDED_COMPARISON,
                             'value' => [
-                                "attribute" => "cart.attributes.affiliate",
-                                "value" => "promkod",
+                                'attribute' => 'cart.attributes.affiliate',
+                                'value' => 'promkod',
                             ]
                         ],
                         [
@@ -291,42 +233,19 @@ class QueryBuilderTest extends TestCase
                     ]
                 ])],
                 'expectedQuery' => [
-                    "query" => [
-                        "bool" => [
-                            "must" => [
-                                [
-                                    "nested" => [
-                                        "path" => "flatConditions",
-                                        "score_mode" => "avg",
-                                        "query" => [
-                                            "bool" => [
-                                                "must" => [
-                                                    [
-                                                        "match" => [
-                                                            "flatConditions.attribute" =>
-                                                                "cart.attributes.affiliate"
-                                                        ]
-                                                    ],
-                                                    [
-                                                        "match" => [
-                                                            "flatConditions.value" => "promkod"
-                                                        ]
-                                                    ]
-                                                ]
-                                            ]
-                                        ]
-                                    ]],
-                                [
-                                    "range" => [
-                                        "start_at" => ["lte" => $now]
-                                    ]
+                    '$and' => [
+                        [
+                            'flatConditions' => [
+                                '$elemMatch' => [
+                                    'attribute' => 'cart.attributes.affiliate',
+                                    'value' => 'promkod'
                                 ]
                             ]
-                        ]
+                        ],
+                        ['start_at' => ['$lte' => $now]]
                     ]
                 ],
             ],
-
         ];
     }
 }
