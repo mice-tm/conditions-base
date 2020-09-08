@@ -33,6 +33,7 @@
     "process-timeout": 1800
   },
   "require-dev": {
-    "codeception/codeception": "2.5.x-dev"
+    "codeception/codeception": "4.1",
+    "codeception/module-asserts": "^1.3"
   }
 }

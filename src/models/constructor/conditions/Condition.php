@@ -52,8 +52,18 @@ class Condition extends Model implements ContainerInterface, ConditionInterface
 //                'required',
 //                'on' => self::SCENARIO_DEFAULT
 //            ],
-            ['conditionModels', 'yii2tech\embedded\Validator', 'message' => 'Conditions are invalid.'],
+            ['operator', 'checkOperator', 'skipOnEmpty' => false],
+            ['conditionModels', 'yii2tech\embedded\Validator', 'message' => 'Conditions are invalid.']
         ];
+    }
+
+    public function checkOperator()
+    {
+        if (empty($this->operator) && sizeof($this->conditionModels) != 0) {
+            $this->addError('operator', 'Operator cannot be empty with filled conditions!');
+            return false;
+        }
+        return true;
     }
 
     /**
