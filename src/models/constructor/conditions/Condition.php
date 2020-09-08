@@ -53,7 +53,7 @@ class Condition extends Model implements ContainerInterface, ConditionInterface
 //                'on' => self::SCENARIO_DEFAULT
 //            ],
             ['operator', 'checkOperator', 'skipOnEmpty' => false],
-            ['conditionModels', 'yii2tech\embedded\Validator']
+            ['conditionModels', 'yii2tech\embedded\Validator', 'message' => 'Conditions are invalid.']
         ];
     }
 
