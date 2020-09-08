@@ -57,7 +57,7 @@ class Condition extends Model implements ContainerInterface, ConditionInterface
         ];
     }
 
-    public function checkConditions($attribute, $params)
+    public function checkOperator()
     {
         if (empty($this->operator) && sizeof($this->conditionModels) != 0) {
             $this->addError('operator', 'Operator cannot be empty with filled conditions!');
